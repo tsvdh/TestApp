@@ -5,12 +5,183 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.tsvdh</groupId>
-    <artifactId>TestApp</artifactId>
+    <artifactId>test.app</artifactId>
     <version>0.1.0</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.tsvdh</groupId>
+            <artifactId>basket-api</artifactId>
+            <version>0.2.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.java.dev.jna</groupId>
+                    <artifactId>jna-platform</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform-jpms</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>skinny-jar</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.build.directory}\modules</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <mainClass>main.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.github.tsvdh</groupId>
+                                    <artifactId>basket-api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.controlsfx</groupId>
+                                    <artifactId>controlsfx</artifactId>
+                                    <version>11.0.0</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.jfxtras</groupId>
+                                    <artifactId>jmetro</artifactId>
+                                    <version>11.6.15</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>net.java.dev.jna</groupId>
+                                    <artifactId>jna-jpms</artifactId>
+                                    <version>5.8.0</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>net.java.dev.jna</groupId>
+                                    <artifactId>jna-platform-jpms</artifactId>
+                                    <version>5.8.0</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}\modules</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-javafx</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}\modules\javafx</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                            <includeArtifactIds>javafx-base, javafx-controls, javafx-fxml, javafx-graphics, javafx-media, javafx-web</includeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.moditect</groupId>
+                <artifactId>moditect-maven-plugin</artifactId>
+                <version>1.0.0.RC1</version>
+                <configuration>
+                    <overwriteExistingFiles>true</overwriteExistingFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>add-module-info-to-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>add-module-info</goal>
+                        </goals>
+                        <configuration>
+                            <modules>
+                                <module>
+                                    <artifact>
+                                        <groupId>org.jetbrains</groupId>
+                                        <artifactId>annotations</artifactId>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>org.jetbrains.annotations</name>
+                                        <exports>org.jetbrains.annotations</exports>
+                                    </moduleInfo>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-runtime-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>create-runtime-image</goal>
+                        </goals>
+                        <configuration>
+                            <modulePath>
+                                <path>${project.build.directory}\modules</path>
+                                <path>${project.build.directory}\modules\javafx</path>
+                            </modulePath>
+                            <modules>
+                                <module>${project.artifactId}</module>
+                            </modules>
+                            <outputDirectory>${project.build.directory}\image</outputDirectory>
+                            <launcher>
+                                <name>TestApp</name>
+                                <module>${project.artifactId}</module>
+                            </launcher>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
