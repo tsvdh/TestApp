@@ -12,7 +12,7 @@ public class Main extends Application {
 
         @Override
         public void start() {
-            new Message("Hello world once again", false);
+            new Message("Hello world for the last time", false);
         }
 
         public static void invokeStart() {
