@@ -12,7 +12,7 @@ public class Main extends Application {
 
         @Override
         public void start() {
-            new Message("This an app to test Basket, v1.0.0", false);
+            new Message("This an app to test Basket\n v1.0.1", false);
         }
 
         public static void invokeStart() {
