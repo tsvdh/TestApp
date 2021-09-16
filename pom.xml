@@ -19,25 +19,28 @@
         <dependency>
             <groupId>com.github.tsvdh</groupId>
             <artifactId>basket-api</artifactId>
-            <version>0.2.4</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.java.dev.jna</groupId>
-                    <artifactId>jna-platform</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>0.4.1</version>
         </dependency>
-
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna-platform-jpms</artifactId>
-            <version>5.8.0</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>properties/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>properties/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
 
             <plugin>
@@ -76,39 +79,17 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>copy</id>
+                        <id>copy-deps</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.github.tsvdh</groupId>
-                                    <artifactId>basket-api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.controlsfx</groupId>
-                                    <artifactId>controlsfx</artifactId>
-                                    <version>11.0.0</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.jfxtras</groupId>
-                                    <artifactId>jmetro</artifactId>
-                                    <version>11.6.15</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>net.java.dev.jna</groupId>
-                                    <artifactId>jna-jpms</artifactId>
-                                    <version>5.8.0</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>net.java.dev.jna</groupId>
-                                    <artifactId>jna-platform-jpms</artifactId>
-                                    <version>5.8.0</version>
-                                </artifactItem>
-                            </artifactItems>
                             <outputDirectory>${project.build.directory}\modules</outputDirectory>
+                            <includeArtifactIds>
+                                jackson-annotations, jackson-core, jackson-databind, basket-api, jna-jpms, jna-platform-jpms,
+                                controlsfx, annotations, jmetro, lombok
+                            </includeArtifactIds>
                         </configuration>
                     </execution>
 
@@ -120,8 +101,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}\modules\javafx</outputDirectory>
-                            <includeScope>runtime</includeScope>
-                            <includeArtifactIds>javafx-base, javafx-controls, javafx-fxml, javafx-graphics, javafx-media, javafx-web</includeArtifactIds>
+                            <includeGroupIds>org.openjfx</includeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -150,7 +130,6 @@
                                     </artifact>
                                     <moduleInfo>
                                         <name>org.jetbrains.annotations</name>
-                                        <exports>org.jetbrains.annotations</exports>
                                     </moduleInfo>
                                 </module>
                             </modules>

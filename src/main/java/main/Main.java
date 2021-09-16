@@ -1,10 +1,10 @@
 package main;
 
-import app.BasketApp;
+
+import basket.api.app.BasketApp;
+import basket.api.prebuilt.Message;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javax.swing.filechooser.FileSystemView;
-import prebuilt.Message;
 
 public class Main extends Application {
 
@@ -12,7 +12,7 @@ public class Main extends Application {
 
         @Override
         public void start() {
-            new Message("Hello world for the last time", false);
+            new Message("This an app to test Basket, v1.0.0", false);
         }
 
         public static void invokeStart() {
