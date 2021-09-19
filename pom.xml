@@ -6,7 +6,7 @@
 
     <groupId>com.github.tsvdh</groupId>
     <artifactId>test.app</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -87,8 +87,8 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}\modules</outputDirectory>
                             <includeArtifactIds>
-                                jackson-annotations, jackson-core, jackson-databind, basket-api, jna-jpms, jna-platform-jpms,
-                                controlsfx, annotations, jmetro, lombok
+                                basket-api, jna-jpms, jna-platform-jpms,
+                                controlsfx, annotations, jmetro
                             </includeArtifactIds>
                         </configuration>
                     </execution>
@@ -115,27 +115,6 @@
                     <overwriteExistingFiles>true</overwriteExistingFiles>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>add-module-info-to-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>add-module-info</goal>
-                        </goals>
-                        <configuration>
-                            <modules>
-                                <module>
-                                    <artifact>
-                                        <groupId>org.jetbrains</groupId>
-                                        <artifactId>annotations</artifactId>
-                                    </artifact>
-                                    <moduleInfo>
-                                        <name>org.jetbrains.annotations</name>
-                                    </moduleInfo>
-                                </module>
-                            </modules>
-                        </configuration>
-                    </execution>
-
                     <execution>
                         <id>create-runtime-image</id>
                         <phase>package</phase>
